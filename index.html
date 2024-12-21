@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Felicidades Cibelitos 🎂</title>
+  <link rel="icon" type="image/png" href="Icon.png">
+  <style>
+    body {
+      display: flex;
+      overflow: hidden;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #dfd686;
+      font-family: Italic;
+      position: relative;
+    }
+    .balloon-container {
+      position: absolute;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      top: 0;
+      left: 0;
+    }
+    .balloon {
+      position: absolute;
+      bottom: -15%;
+      width: 55px;
+      height: 70px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #ffffff88, transparent),
+                  var(--balloon-color, #FF5733);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      animation: floatUp linear forwards;
+    }
+    .balloon::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 45%;
+      width: 10px;
+      height: 15px;
+      background-color: var(--balloon-color, #FF5733);
+      clip-path: polygon(50% 0, 100% 100%, 0 100%);
+    }
+    .balloon .zigzag-line {
+      position: absolute;
+      bottom: -80px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    svg {
+      display: block;
+      width: 2px;
+      height: 80px;
+    }
+    .balloon .zigzag-line path {
+      stroke: #ffffff;
+      stroke-width: 2;
+      fill: none;
+    }
+    @keyframes floatUp {
+      from {
+        transform: translateY(0);
+      }
+      to {
+        transform: translateY(-120vh);
+      }
+    }
+    .message {
+      position: absolute;
+      font-size: 1.5rem;
+      color: black;
+      font-weight: bold;
+      display: none;
+      z-index: 4;
+    }
+    .explosion {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle, rgba(255,200,50,0.9) 0%, rgba(255,50,50,0.7) 50%, transparent 70%);
+      border-radius: 50%;
+      animation: explode 0.4s ease-out forwards;
+    }
+    @keyframes explode {
+      from {
+        transform: scale(0.5);
+        opacity: 1;
+      }
+      to {
+        transform: scale(1.5);
+        opacity: 0;
+      }
+    }
+    .score {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 2rem;
+      color: white;
+      font-weight: bold;
+    }
+    .congratulations {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3rem;
+    font-weight: bold;
+    color: #FF6347;
+    -webkit-text-stroke: 2px #ffffff;
+    display: none;
+    z-index: 5;
+    text-align: center;
+}
+
+.birthday-number {
+    font-size: 10rem; /* Tamaño grande */
+    font-weight: bold;
+    color:#c7a438; /* Color llamativo */
+    text-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2), 
+                 -5px -5px 10px rgba(0, 0, 0, 0.2),
+                 0px 10px 15px rgba(0, 0, 0, 0.3);
+    
+    transition: transform 0.3s ease-in-out;
+}
+
+.birthday-number:hover {
+    transform: perspective(500px) rotateX(0deg) rotateY(0deg);
+}
+
+.congratulations p {
+    margin: 0;
+}
+
+    .envelope {
+      position: fixed;
+      width: 200px;
+      height: 120px;
+      background: #e0a96d;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      animation: idle 1s infinite alternate ease-in-out;
+      z-index: 2;
+      transform: translate(-50%, -50%);
+    }
+    .envelope::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, #d99862, #e9c29b);
+      border-radius: 10px;
+      z-index: 1;
+    }
+    @media (max-width: 600px) {
+  .envelope {
+    width: 160px;
+    height: 96px;
+  }
+}
+    .flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 60%;
+      background: #d99862;
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      z-index: 2;
+      transition: transform 0.5s ease-out;
+      transform-origin: top center;
+    }
+    .letter {
+      position: absolute;
+      top: 60%;
+      left: 50%;
+      width: 80%;
+      height: 70%;
+      background: white;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+      z-index: 0;
+      opacity: 0;
+      transform: translateX(-50%);
+      transition: opacity 1s ease-out, top 1s ease-out;
+    }
+    .letter-content {
+      position: absolute;
+      top: 10%;
+      left: 10%;
+      font-size: 1.2rem;
+      color: #333;
+      padding: 10px;
+    }
+    @keyframes idle {
+      0% {
+        transform: rotate(4deg);
+      }
+      50% {
+        transform: rotate(-4deg);
+      }
+      100% {
+        transform: rotate(4deg);
+      }
+    }
+    .envelope.open .flap {
+      transform: rotateX(90deg);
+    }
+    .envelope.open .letter {
+      opacity: 1;
+      top: 20%;
+    }
+
+    
+
+    /* Animación para abrir la carta */
+    .letter.open {
+      animation: openLetter 1s forwards;
+    }
+
+    @keyframes openLetter {
+      0% {
+        transform: scale(0.5);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    /* Hoja que se amplía y se mueve hacia el centro */
+    .expanded-letter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  border-radius: 15px;
+  display: none;
+  padding: 15px;  /* Ajuste en el padding */
+  font-size: 1.2rem;
+  color: #333;
+  animation: expandLetter 2s forwards;
+  z-index: 3;
+  width: 80%;    /* Ancho ajustable */
+  height: 80%;   /* Altura ajustable, puedes modificarla según sea necesario */
+  box-sizing: border-box;
+  max-width: 90%; /* Limitamos el ancho máximo */
+  overflow-y: auto; /* Permite la barra de desplazamiento vertical */
+}
+
+
+    @keyframes expandLetter {
+      0% {
+        transform: translate(-50%, -50%) scale(0.3);
+        opacity: 0;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+    }
+
+     /* Animación de desvanecimiento para la X */
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: red;
+      cursor: pointer;
+      z-index: 4;
+      opacity: 0;
+      animation: fadeIn 5s forwards 1s; /* Aparece después de la animación de expansión */
+    }
+    
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+    
+
+    .confetti {
+  position: absolute;
+  top: 0;
+  width: 5px;
+  height: 5px;
+  background-color: #FF5733;
+  animation: fall 3s linear infinite;
+  opacity: 0;
+  z-index: 6;
+}
+
+@keyframes fall {
+  from {
+    transform: translateY(-100px) rotate(0deg);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+audio {
+  position: absolute;
+  right: 10px;  /* Ajusta para mover el reproductor hacia el borde derecho */
+  top: 20px;    /* Ajusta para moverlo desde la parte superior */
+  width: 100px; /* Reduces el tamaño del reproductor */
+  opacity: 0.3; /* Lo hace semi-transparente */
+        }
+        
+  
+  </style>
+</head>
+<body>
+  <div class="balloon-container"></div>
+  <div class="message">¡Feliz Cumpleaños!</div>
+  <div class="score"> 🎂: 0</div>
+  <div class="congratulations">
+    <center><p class="birthday-number">21</p></center>
+    <p>¡Feliz Cumpleaños!</p>
+</div>
+
+
+  <div class="envelope" onclick="openEnvelope()">
+    <div class="flap"></div>
+    <div class="letter">
+      <div class="letter-content">
+        <p>¡Hola Cibelitos! <br> ¡Feliz Cumpleaños! 🎉<br> Que tengas un excelente día lleno de sorpresas y alegrías. ¡Disfruta mucho! 🥳</p>
+      </div>
+    </div>
+  </div>
+    
+  <audio controls autoplay> <source src="horse.ogg" type="audio/ogg"> <source src="Mañanitas.mp3" type="audio/mpeg" > Su navegador no soporta el elemento de audio. </audio>
+
+  <!-- Hoja que se expande con el texto -->
+  <div class="expanded-letter" id="expandedLetter">
+    <p>¡Holaaa Cibelitos! 😘<br><br> Hoy es un día verdaderamente único, 🥳 un día para celebrar a alguien increíblemente especial, ¡a ti! Este día es mucho más que una simple fecha en el calendario,  es un recordatorio de lo maravillosa, amable, y única que eres. En cada momento compartido contigo, he podido descubrir lo increíble que eres como persona 💫, y quiero que sepas lo mucho que significas para mí. Espero que hoy esté lleno de momentos que te hagan sonreír de corazón ❤️, de risas sinceras y de momentos tan hermosos de los que se quedan grabados en tu memoria para siempre. Te mereces toda la felicidad del mundo, cada sonrisa, cada sueño cumplido, porque eres alguien excepcional.<br> Te quiero muchísimo, y quiero que sepas que no solo hoy, sino siempre, estaré aquí para ti, apoyándote en cada paso, celebrando cada logro y siendo testigo de todas tus pequeñas y grandes victorias. Además nuestras pato aventuras no pueden faltar ehhhh ⛸️, nos quedan muchas por vivir.<br><br>¡Te deseo un Feliz cumpleañooos!🎂🎉 <br>No olvides pedir un deseo 🕯️, porque este día es para ti, espero que todos tus sueños se hagan realidad, te mando un gran abrazooo✨.
+  </p>
+    <div class="close-btn" onclick="closeExpandedLetter()">X</div>
+  </div>
+
+  <script>
+    const balloonColors = ['#FF5733', '#FFC300', '#DAF7A6', '#FF33FF', '#33FF57', '#33C3FF', '#FFAA33', '#C70039', '#581845'];
+    let score = 0;
+
+    function getRandomColor() {
+      return balloonColors[Math.floor(Math.random() * balloonColors.length)];
+    }
+
+    function getRandomPosition() {
+      return `${Math.random() * 100}%`;
+    }
+
+    function createBalloon() {
+      const balloon = document.createElement('div');
+      balloon.classList.add('balloon');
+      balloon.style.setProperty('--balloon-color', getRandomColor());
+      balloon.style.left = getRandomPosition();
+      balloon.style.animationDuration = `${Math.random() * 10 + 4}s`;
+
+      const zigzagLine = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      zigzagLine.setAttribute("class", "zigzag-line");
+
+      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      path.setAttribute("d", "M0,0 Q5,10 0,20 T0,40 T0,60 T0,80");
+      path.setAttribute("stroke", "#fff");
+      path.setAttribute("stroke-width", "2");
+      path.setAttribute("fill", "none");
+
+      zigzagLine.appendChild(path);
+      balloon.appendChild(zigzagLine);
+
+      document.querySelector('.balloon-container').appendChild(balloon);
+
+      balloon.addEventListener('animationend', () => balloon.remove());
+      balloon.addEventListener('click', (e) => {
+        createExplosion(e.clientX, e.clientY, balloon.style.getPropertyValue('--balloon-color'));
+        playPopSound();
+        balloon.remove();
+        updateScore();
+      });
+    }
+
+    function createExplosion(x, y, color) {
+      const explosion = document.createElement('div');
+      explosion.classList.add('explosion');
+      explosion.style.left = `${x - 50}px`;
+      explosion.style.top = `${y - 50}px`;
+
+      const message = document.querySelector('.message');
+      message.style.left = `${x - 80}px`;
+      message.style.top = `${y - 40}px`;
+      message.style.color = color;
+      message.style.display = 'block';
+
+      document.body.appendChild(explosion);
+
+      setTimeout(() => {
+        explosion.remove();
+        message.style.display = 'none';
+      }, 400);
+    }
+
+    function playPopSound() {
+      const popSound = new Audio('Pop.mp3'); // Cambia 'pop.mp3' por la ruta de tu archivo.
+      popSound.play();
+    }
+
+    function updateScore() {
+      score++;
+      const scoreElement = document.querySelector('.score');
+      scoreElement.textContent = `🎂: ${score}`;
+
+      if (score >= 21) {
+        score = 0;
+        scoreElement.textContent = `🎂: 0`;
+        showCongratulations();
+      }
+    }
+
+    function showCongratulations() {
+      const congratulations = document.querySelector('.congratulations');
+      congratulations.style.display = 'block';
+      setTimeout(() => {
+        congratulations.style.display = 'none';
+      }, 5000);
+    }
+
+    function startGame() {
+      setInterval(createBalloon, 300);
+    }
+
+    function generateConfetti() {
+  const colors = ['#FF5733', '#FFC300', '#DAF7A6', '#FF33FF', '#33FF57', '#33C3FF'];
+  const confettiCount = 50; // Número de piezas de confeti
+
+  for (let i = 0; i < confettiCount; i++) {
+    const confetti = document.createElement('div');
+    confetti.classList.add('confetti');
+    confetti.style.left = `${Math.random() * 100}%`; // Posición aleatoria
+    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    document.body.appendChild(confetti);
+
+    // Eliminar el confeti después de un tiempo
+    setTimeout(() => {
+      confetti.remove();
+    }, 3000); // El confeti se elimina después de 3 segundos
+  }
+}
+
+function showCongratulations() {
+  const congratulations = document.querySelector('.congratulations');
+  congratulations.style.display = 'block';
+
+  // Generar confeti al mostrar el mensaje
+  generateConfetti();
+
+  setTimeout(() => {
+    congratulations.style.display = 'none';
+  }, 5000);
+}
+
+
+    function openEnvelope() {
+  const envelope = document.querySelector('.envelope');
+  const expandedLetter = document.getElementById('expandedLetter');
+  // Abre el sobre si no está abierto, y muestra la carta
+  if (!envelope.classList.contains('open')) {
+    envelope.classList.add('open');
+    expandedLetter.style.display = 'block';
+  } else {
+    // Si el sobre está abierto, muestra la carta
+    expandedLetter.style.display = 'block';
+  }
+}
+
+function closeExpandedLetter(event) {
+  const expandedLetter = document.getElementById('expandedLetter');
+  const envelope = document.querySelector('.envelope');
+  
+  // Cierra la carta sin eliminarla completamente
+  expandedLetter.style.display = 'none';
+  
+  // Cierra el sobre
+  envelope.classList.remove('open');
+  
+  // Evitar que el clic en el "X" cierre también el sobre
+  event.stopPropagation();
+}
+
+    function increaseScore() {
+      score++;
+      document.querySelector('.score').innerText = `🎂: ${score}`;
+      if (score >= 10) {
+        document.querySelector('.congratulations').style.display = 'block';
+      }
+    }
+
+    
+
+    window.onload = startGame;
+
+    
+  </script>
+</body>
+</html>
